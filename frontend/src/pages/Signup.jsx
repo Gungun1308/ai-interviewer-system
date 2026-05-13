@@ -1,0 +1,47 @@
+import React, { useState } from "react";
+import API from "../api";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
+export default function Signup() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!name || !email || !password) {
+      toast.error("Please fill all fields");
+      return;
+    }
+    try {
+      setLoading(true);
+      const res = await API.post("/api/auth/signup", { name, email, password });
+      const { token, role, id } = res.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("userId", id);
+      toast.success("Signed up");
+      navigate("/upload");
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.msg || "Signup failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-md mx-auto mt-12 bg-gray-200 p-6 rounded">
+      <h2 className="text-2xl mb-4">Signup</h2>
+      <form onSubmit={submit} className="space-y-3">
+        <input value={name} onChange={e => setName(e.target.value)} placeholder="Name" className="w-full p-3 rounded bg-gray-300" />
+        <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" className="w-full p-3 rounded bg-gray-300" />
+        <input value={password} onChange={e => setPassword(e.target.value)} type="password" placeholder="Password" className="w-full p-3 rounded bg-gray-300" />
+        <button disabled={loading} className="w-full bg-indigo-600 p-3 rounded">{loading ? "Signing..." : "Signup"}</button>
+      </form>
+    </div>
+  );
+}

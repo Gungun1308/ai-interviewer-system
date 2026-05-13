@@ -1,0 +1,13 @@
+/* App.css is typically empty when using Tailwind but included for structure */
+.loading-skeleton {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
