@@ -115,7 +115,13 @@ export default function ResumeUpload() {
       fd.append("resume", file);
 
       // 1️⃣ Upload resume
-     await API.post(`/api/resume/upload/${userId}`, fd);
+     await API.post(
+  `/api/resume/upload/${userId}`,
+  fd,
+  {
+    transformRequest: [(data) => data],
+  }
+);
       // 2️⃣ Generate questions and get interviewId
       const qres = await API.post(`/api/resume/generate-questions/${userId}`);
       const { skills, questions, interviewId } = qres.data;
@@ -158,7 +164,7 @@ export default function ResumeUpload() {
           Upload File
           <input
             type="file"
-            accept=".pdf,.doc,.docx"
+            accept="application/pdf,.pdf,.doc,.docx"
             onChange={(e) => setFile(e.target.files[0])}
             className="hidden"
           />
