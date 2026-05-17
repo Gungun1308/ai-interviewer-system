@@ -1,20 +1,17 @@
-import React, { createContext, useContext, useEffect, useLayoutEffect, useState } from 'react';
+import React, { createContext, useContext, useLayoutEffect, useState } from 'react';
 
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('light');
-
-  useEffect(() => {
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === 'undefined') return 'light';
     try {
       const stored = localStorage.getItem('theme');
-      if (stored === 'dark' || stored === 'light') {
-        setTheme(stored);
-      }
-    } catch (e) {
-      // keep default light theme on error
+      return stored === 'dark' || stored === 'light' ? stored : 'light';
+    } catch {
+      return 'light';
     }
-  }, []);
+  });
 
   useLayoutEffect(() => {
     const root = document.documentElement;

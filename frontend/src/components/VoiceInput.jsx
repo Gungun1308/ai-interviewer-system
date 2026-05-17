@@ -9,9 +9,9 @@ const VoiceInput = ({ questionIndex, currentAnswer, updateAnswer }) => {
     };
 
     return (
-        <div className="mt-4 p-4 border border-gray-200 rounded-xl shadow-inner bg-white">
+        <div className="mt-4 p-4 border border-gray-200 dark:border-gray-700 rounded-xl shadow-inner bg-white dark:bg-gray-900 text-black dark:text-white">
             <div className="flex justify-between items-center mb-4">
-                <h4 className="text-lg font-semibold text-gray-700">Answer Input</h4>
+                <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-100">Answer Input</h4>
                 <button
                     onClick={() => setIsVoiceMode(!isVoiceMode)}
                     className="text-sm font-medium text-primary hover:text-indigo-700 transition duration-200 flex items-center space-x-1"
@@ -24,7 +24,7 @@ const VoiceInput = ({ questionIndex, currentAnswer, updateAnswer }) => {
             {isVoiceMode ? (
                 <div className="flex flex-col items-center py-4">
                     <AudioRecorder onRecordingComplete={handleRecordingComplete} />
-                    <p className="mt-4 text-sm text-gray-500 italic">
+                    <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 italic">
                         *Note: Transcription is simulated. Use the text area to edit/confirm your answer.
                     </p>
                 </div>
@@ -34,7 +34,7 @@ const VoiceInput = ({ questionIndex, currentAnswer, updateAnswer }) => {
                     value={currentAnswer}
                     onChange={(e) => updateAnswer(questionIndex, e.target.value)}
                     placeholder="Type your answer here..."
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-200"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-primary focus:border-primary transition duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                 ></textarea>
             )}
         </div>

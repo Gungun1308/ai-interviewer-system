@@ -1,10 +1,10 @@
 export default function Home() {
   return (
-    <section className="flex flex-col items-center justify-center text-center py-20 bg-gradient-to-r from-blue-100 to-purple-100">
-      <h1 className="text-5xl font-extrabold text-gray-900">
-        Welcome to <span className="text-blue-600">AI Virtual Interviewer</span>
+    <section className="flex flex-col items-center justify-center text-center py-20 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-slate-950 dark:to-slate-900">
+      <h1 className="text-5xl font-extrabold text-gray-900 dark:text-white">
+        Welcome to <span className="text-blue-600 dark:text-indigo-400">AI Virtual Interviewer</span>
       </h1>
-      <p className="mt-4 text-lg text-gray-600 max-w-2xl">
+      <p className="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-2xl">
         Upload your resume, take a real-time AI-powered interview, and get instant feedback with
         detailed performance analysis.
       </p>

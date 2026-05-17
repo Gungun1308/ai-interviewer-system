@@ -78,50 +78,50 @@ export default function SystemCheck({ onComplete }) {
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow-md max-w-md">
-      <h3 className="text-xl font-bold mb-6">System Requirements Check</h3>
+    <div className="bg-white dark:bg-gray-900 dark:text-white p-8 rounded-lg shadow-md max-w-md">
+      <h3 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">System Requirements Check</h3>
       
       {loading && (
         <div className="text-center py-4">
-          <p className="text-gray-600">Checking system requirements...</p>
+          <p className="text-gray-600 dark:text-gray-300">Checking system requirements...</p>
         </div>
       )}
 
       {!loading && (
         <>
           <div className="space-y-4 mb-6">
-            <div className={`flex items-center justify-between p-3 rounded ${checks.camera ? 'bg-green-50' : 'bg-red-50'}`}>
+            <div className={`flex items-center justify-between p-3 rounded ${checks.camera ? 'bg-green-50 dark:bg-green-900/20' : 'bg-red-50 dark:bg-red-900/20'}`}>
               <span className="font-medium">Camera Access</span>
               <span className={getStatusColor(checks.camera)}>{getStatusIcon(checks.camera)}</span>
             </div>
 
-            <div className={`flex items-center justify-between p-3 rounded ${checks.microphone ? 'bg-green-50' : 'bg-red-50'}`}>
+            <div className={`flex items-center justify-between p-3 rounded ${checks.microphone ? 'bg-green-50 dark:bg-green-900/20' : 'bg-red-50 dark:bg-red-900/20'}`}>
               <span className="font-medium">Microphone Access</span>
               <span className={getStatusColor(checks.microphone)}>{getStatusIcon(checks.microphone)}</span>
             </div>
 
-            <div className={`flex items-center justify-between p-3 rounded ${checks.internet ? 'bg-green-50' : 'bg-red-50'}`}>
+            <div className={`flex items-center justify-between p-3 rounded ${checks.internet ? 'bg-green-50 dark:bg-green-900/20' : 'bg-red-50 dark:bg-red-900/20'}`}>
               <span className="font-medium">Internet Connection</span>
               <span className={getStatusColor(checks.internet)}>{getStatusIcon(checks.internet)}</span>
             </div>
 
-            <div className={`flex items-center justify-between p-3 rounded ${checks.bandwidth ? 'bg-green-50' : 'bg-red-50'}`}>
+            <div className={`flex items-center justify-between p-3 rounded ${checks.bandwidth ? 'bg-green-50 dark:bg-green-900/20' : 'bg-red-50 dark:bg-red-900/20'}`}>
               <span className="font-medium">Bandwidth Speed</span>
               <span className={getStatusColor(checks.bandwidth)}>{getStatusIcon(checks.bandwidth)}</span>
             </div>
           </div>
 
           {!allPassed && (
-            <div className="bg-yellow-50 border border-yellow-200 p-4 rounded mb-6">
-              <p className="text-sm text-yellow-800">
+            <div className="bg-yellow-50 dark:bg-yellow-950/40 border border-yellow-200 dark:border-yellow-700 p-4 rounded mb-6">
+              <p className="text-sm text-yellow-800 dark:text-yellow-200">
                 ⚠️ Some requirements are not met. Please ensure camera and microphone are enabled.
               </p>
             </div>
           )}
 
           {allPassed && (
-            <div className="bg-green-50 border border-green-200 p-4 rounded mb-6">
-              <p className="text-sm text-green-800">
+            <div className="bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-700 p-4 rounded mb-6">
+              <p className="text-sm text-green-800 dark:text-green-200">
                 ✅ All system requirements are ready!
               </p>
             </div>
@@ -134,7 +134,7 @@ export default function SystemCheck({ onComplete }) {
               className={`w-full py-2 px-4 rounded font-medium transition ${
                 allPassed
                   ? 'bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer'
-                  : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                  : 'bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-300 cursor-not-allowed'
               }`}
             >
               {allPassed ? 'Continue to Interview' : 'Fix Issues to Continue'}

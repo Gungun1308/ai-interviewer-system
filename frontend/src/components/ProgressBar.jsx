@@ -11,7 +11,7 @@ export default function ProgressBar({ currentQuestion, totalQuestions, timeLeft,
     'text-gray-700';
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
+    <div className="bg-white dark:bg-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 p-4 rounded-lg shadow-sm mb-6">
       {/* Question Progress */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2">
@@ -32,7 +32,7 @@ export default function ProgressBar({ currentQuestion, totalQuestions, timeLeft,
         </div>
 
         {/* Question counter text */}
-        <div className="mt-2 text-xs text-gray-600">
+        <div className="mt-2 text-xs text-gray-600 dark:text-gray-300">
           {Math.round(progressPercentage)}% complete
         </div>
       </div>
@@ -40,7 +40,7 @@ export default function ProgressBar({ currentQuestion, totalQuestions, timeLeft,
       {/* Time indicator bar */}
       <div className="flex items-center gap-2">
         <span className="text-xs font-semibold">Time:</span>
-        <div className="flex-1 bg-gray-100 rounded h-1.5">
+        <div className="flex-1 bg-gray-100 dark:bg-slate-800 rounded h-1.5">
           <div
             className={`h-1.5 rounded transition-all ${
               timeLeft <= 10 ? 'bg-red-500' :
