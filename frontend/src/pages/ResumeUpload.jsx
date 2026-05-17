@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import API from "../api";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Spinner from "../components/Spinner";
 
 export default function ResumeUpload() {
   const [file, setFile] = useState(null);
@@ -115,13 +116,8 @@ export default function ResumeUpload() {
       fd.append("resume", file);
 
       // 1️⃣ Upload resume
-     await API.post(
-  `/api/resume/upload/${userId}`,
-  fd,
-  {
-    transformRequest: [(data) => data],
-  }
-);
+      // let axios set Content-Type and boundary automatically for FormData
+      await API.post(`/api/resume/upload/${userId}`, fd);
       // 2️⃣ Generate questions and get interviewId
       const qres = await API.post(`/api/resume/generate-questions/${userId}`);
       const { skills, questions, interviewId } = qres.data;
@@ -157,21 +153,23 @@ export default function ResumeUpload() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-12 bg-gray-200 p-6 rounded">
+    <div className="max-w-2xl mx-auto mt-12 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded">
       <h2 className="text-2xl mb-4">Upload Resume</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <label className="inline-flex items-center px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl cursor-pointer shadow-md transition-all duration-200">
-          Upload File
+        <label className="block">
+          <span className="sr-only">Choose file</span>
           <input
             type="file"
-            accept="application/pdf,.pdf,.doc,.docx"
+            accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*"
+            capture="environment"
             onChange={(e) => setFile(e.target.files[0])}
-            className="hidden"
+            className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700"
           />
+          {file && <p className="mt-2 text-sm text-gray-600">Selected: {file.name}</p>}
         </label>
         <div className="flex gap-2">
-          <button disabled={uploading} className="bg-indigo-600 px-4 py-2 rounded text-white">
-            {uploading ? "Processing..." : "Upload & Generate"}
+          <button disabled={uploading} className="bg-indigo-600 px-4 py-2 rounded text-white flex items-center gap-3">
+            {uploading ? (<><Spinner size={1.25} /> Processing...</>) : "Upload & Generate"}
           </button>
           <button
             type="button"

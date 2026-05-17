@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import html2pdf from "html2pdf.js";
+import CircularChart from "../components/CircularChart";
 
 export default function Result() {
   const report = JSON.parse(localStorage.getItem("lastReport") || "null");
@@ -46,7 +47,7 @@ export default function Result() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 bg-gray-50 p-6 rounded-lg shadow-lg">
+    <div className="max-w-4xl mx-auto mt-8 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded-lg shadow-lg">
       <div className="mb-6 flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-800">Interview Results</h2>
         <button
@@ -80,15 +81,15 @@ export default function Result() {
 
         {/* Overall Score Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-lg border-2 border-indigo-200">
-            <p className="text-gray-700 font-semibold mb-3">Overall Score</p>
-            <div className="text-5xl font-bold mb-2">
-              <span className={getScoreColor(result.score || 0)}>
-                {result.score || 0}
-              </span>
-              <span className="text-2xl text-gray-600">/100</span>
+          <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-lg border-2 border-indigo-200 flex items-center gap-6">
+            <div>
+              <p className="text-gray-700 font-semibold mb-3">Overall Score</p>
+              <CircularChart value={result.score || 0} />
             </div>
-            <p className="text-sm text-gray-600">Performance: {result.percentage || 0}%</p>
+            <div>
+              <p className="text-sm text-gray-600">Performance: {result.percentage || 0}%</p>
+              <p className={`mt-3 text-2xl font-bold ${getScoreColor(result.score || 0)}`}>{result.score || 0}/100</p>
+            </div>
           </div>
 
           <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border-2 border-purple-200">

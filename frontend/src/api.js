@@ -1,7 +1,9 @@
 import axios from "axios";
+import toast from 'react-hot-toast';
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://ai-interviewer-system-8yqs.onrender.com",
+  baseURL: import.meta.env.VITE_API_URL || '/api',
+  timeout: 30000,
 });
 
 
@@ -17,8 +19,11 @@ API.interceptors.response.use((res) => res, (err) => {
     // token expired/invalid: clear and redirect
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
-    // optionally location.href = "/login";
+    // redirect to login on auth failure
+    try { window.location.href = '/login'; } catch(e){}
   }
+  const msg = err.response?.data?.msg || err.response?.data?.error || err.message || 'API Error';
+  try { toast.error(msg); } catch (e) {}
   return Promise.reject(err);
 });
 

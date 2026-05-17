@@ -19,10 +19,11 @@ export default function Signup() {
     try {
       setLoading(true);
       const res = await API.post("/api/auth/signup", { name, email, password });
-      const { token, role, id } = res.data;
+      const { token, role, id, user } = res.data;
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
       localStorage.setItem("userId", id);
+      if (user) localStorage.setItem('user', JSON.stringify(user));
       toast.success("Signed up");
       navigate("/upload");
     } catch (err) {
@@ -34,7 +35,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-12 bg-gray-200 p-6 rounded">
+    <div className="max-w-md mx-auto mt-12 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded">
       <h2 className="text-2xl mb-4">Signup</h2>
       <form onSubmit={submit} className="space-y-3">
         <input value={name} onChange={e => setName(e.target.value)} placeholder="Name" className="w-full p-3 rounded bg-gray-300" />

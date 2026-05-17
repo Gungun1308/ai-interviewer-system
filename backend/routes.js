@@ -9,6 +9,23 @@ const { hfClient, extractResumeText } = require('./utils');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecret123';
 
+// Simple JWT auth middleware
+function verifyToken(req, res, next) {
+  try {
+    const auth = req.headers.authorization || req.headers.Authorization;
+    if (!auth) return res.status(401).json({ msg: 'Authorization header missing' });
+    const parts = auth.split(' ');
+    if (parts.length !== 2 || parts[0] !== 'Bearer') return res.status(401).json({ msg: 'Invalid authorization format' });
+    const token = parts[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded.user;
+    next();
+  } catch (err) {
+    console.error('Auth verification failed', err.message);
+    return res.status(401).json({ msg: 'Invalid or expired token' });
+  }
+}
+
 // =======================
 // ✅ HELPER FUNCTION (FIXED FINAL)
 // =======================
@@ -224,7 +241,7 @@ router.post('/auth/signup', async (req, res, next) => {
         user = await User.create({ name, email, password: hashedPassword, role });
 
         const token = generateToken(user);
-        res.status(201).json({ token, role: user.role, id: user._id });
+          res.status(201).json({ token, role: user.role, id: user._id, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
         next(err);
     }
@@ -241,23 +258,44 @@ router.post('/auth/login', async (req, res, next) => {
         if (!match) return res.status(400).json({ msg: 'Invalid Credentials' });
 
         const token = generateToken(user);
-        res.json({ token, role: user.role, id: user._id });
+        res.json({ token, role: user.role, id: user._id, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
         next(err);
     }
 });
 
+// Get current user
+router.get('/auth/me', verifyToken, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+    res.json({ user });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // =======================
 // RESUME UPLOAD
 // =======================
-router.post('/resume/upload/:userId', upload.single('resume'), async (req, res, next) => {
+router.post('/resume/upload/:userId', verifyToken, upload.single('resume'), async (req, res, next) => {
     try {
         const { userId } = req.params;
         if (!req.file) return res.status(400).json({ msg: "No file uploaded" });
+    // file type validation
+    const allowed = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowed.includes(req.file.mimetype)) {
+      return res.status(400).json({ msg: 'Invalid file type. Only PDF/DOC/DOCX allowed' });
+    }
 
-        const user = await User.findById(userId);
+    const user = await User.findById(userId);
         if (!user || user.role !== 'candidate') 
             return res.status(404).json({ msg: "Candidate not found" });
+
+    // ensure the requester is the owner or admin
+    if (String(req.user.id) !== String(userId) && req.user.role !== 'admin') {
+      return res.status(403).json({ msg: 'Forbidden - cannot upload for this user' });
+    }
 
         const resumeText = await extractResumeText(req.file.buffer, req.file.originalname);
 
@@ -284,11 +322,16 @@ router.post('/resume/upload/:userId', upload.single('resume'), async (req, res, 
 // =======================
 // QUESTION GENERATION
 // =======================
-router.post('/resume/generate-questions/:userId', async (req, res, next) => {
+router.post('/resume/generate-questions/:userId', verifyToken, async (req, res, next) => {
   try {
     const { userId } = req.params;
 
     const resume = await Resume.findOne({ candidate: userId });
+
+    // ensure caller is owner
+    if (String(req.user.id) !== String(userId) && req.user.role !== 'admin') {
+      return res.status(403).json({ msg: 'Forbidden - cannot generate questions for this user' });
+    }
 
     if (!resume) {
       return res.status(404).json({ msg: "Resume not found" });
@@ -374,7 +417,7 @@ router.post('/resume/generate-questions/:userId', async (req, res, next) => {
 // =======================
 // INTERVIEW EVALUATION
 // =======================
-router.post('/interview/evaluate', async (req, res, next) => {
+router.post('/interview/evaluate', verifyToken, async (req, res, next) => {
   try {
     // ✅ ENHANCED: Support for new advanced metrics
     const { userId, interviewId, answers, suspicious, metrics = {}, result: clientResult = {} } = req.body;
@@ -408,6 +451,11 @@ router.post('/interview/evaluate', async (req, res, next) => {
     if (interview.candidate.toString() !== userId) {
       console.log("❌ User mismatch - interview.candidate:", interview.candidate, "userId:", userId);
       return res.status(403).json({ msg: "Unauthorized - interview doesn't belong to this user" });
+    }
+
+    // ensure caller identity matches the user id in body
+    if (String(req.user.id) !== String(userId) && req.user.role !== 'admin') {
+      return res.status(403).json({ msg: 'Forbidden - cannot evaluate for this user' });
     }
 
     console.log("🔍 Looking for questions for interview:", interviewId);

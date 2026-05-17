@@ -3,6 +3,7 @@ import API from "../api";
 import { useNavigate } from "react-router-dom";
 import AudioRecorder from "../components/AudioRecorder";
 import toast from "react-hot-toast";
+import Spinner from "../components/Spinner";
 
 const QUESTION_TIME = 60;
 
@@ -98,7 +99,8 @@ export default function Interview() {
 
   const startWebcam = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
+      // request both video and audio to ensure mic+cam permissions are prompted together
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 } }, audio: true });
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -115,7 +117,7 @@ export default function Interview() {
     } catch (error) {
       console.error("Webcam access denied:", error);
       setCameraOn(false);
-      setWarning("Webcam access is required for the interview. Please allow camera permission.");
+      setWarning("Camera and microphone access are required. Please allow permissions and refresh the page.");
     }
   };
 
@@ -272,7 +274,7 @@ export default function Interview() {
   const question = questions[currentIndex];
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 bg-gray-100 p-6 rounded shadow-lg" onCopy={preventCopy}>
+    <div className="max-w-3xl mx-auto mt-8 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded shadow-lg" onCopy={preventCopy}>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>

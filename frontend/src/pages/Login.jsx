@@ -18,13 +18,15 @@ export default function Login() {
     try {
       setLoading(true);
       const res = await API.post("/api/auth/login", { email, password });
-      const { token, role, id } = res.data;
+      const { token, role, id, user } = res.data;
 
-      // Save token, role, and userId
+      // Save auth details
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
       localStorage.setItem("userId", id);
+      if (user) localStorage.setItem('user', JSON.stringify(user));
 
+      // make sure API has token immediately (interceptor reads localStorage)
       toast.success("Logged in");
       navigate("/upload");
     } catch (err) {
@@ -36,7 +38,7 @@ export default function Login() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-12 bg-gray-200 p-6 rounded">
+    <div className="max-w-md mx-auto mt-12 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded">
       <h2 className="text-2xl mb-4 text-center font-semibold">Login</h2>
       <form onSubmit={submit} className="space-y-3">
         <input
