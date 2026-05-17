@@ -21,8 +21,8 @@ export default function InstructionModal({ isOpen, onStart, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+    <div className="fixed inset-0 bg-slate-900/50 dark:bg-slate-950/70 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-96 overflow-y-auto transition-colors duration-300">
         {/* Instructions Step */}
         {step === 'instructions' && (
           <div className="p-8">

@@ -153,7 +153,7 @@ export default function ResumeUpload() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-12 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded">
+    <div className="max-w-2xl mx-auto mt-12 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded transition-colors duration-300">
       <h2 className="text-2xl mb-4">Upload Resume</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <label className="block">
@@ -163,7 +163,7 @@ export default function ResumeUpload() {
             accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*"
             capture="environment"
             onChange={(e) => setFile(e.target.files[0])}
-            className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700"
+            className="block w-full text-sm text-gray-700 dark:text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700"
           />
           {file && <p className="mt-2 text-sm text-gray-600">Selected: {file.name}</p>}
         </label>
@@ -186,8 +186,8 @@ export default function ResumeUpload() {
       </form>
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 px-4 py-6">
-          <div className="w-full max-w-3xl overflow-hidden rounded-3xl bg-white p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-slate-950/80 px-4 py-6">
+          <div className="w-full max-w-3xl overflow-hidden rounded-3xl bg-white dark:bg-gray-900 p-6 shadow-2xl transition-colors duration-300">
             <h2 className="text-3xl font-bold mb-4 text-center">Interview Instructions</h2>
             <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
               <div className="space-y-4 text-gray-700">

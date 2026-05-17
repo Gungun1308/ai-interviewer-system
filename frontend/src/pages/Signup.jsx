@@ -35,13 +35,13 @@ export default function Signup() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-12 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded">
+    <div className="max-w-md mx-auto mt-12 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded transition-colors duration-300">
       <h2 className="text-2xl mb-4">Signup</h2>
       <form onSubmit={submit} className="space-y-3">
-        <input value={name} onChange={e => setName(e.target.value)} placeholder="Name" className="w-full p-3 rounded bg-gray-300" />
-        <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" className="w-full p-3 rounded bg-gray-300" />
-        <input value={password} onChange={e => setPassword(e.target.value)} type="password" placeholder="Password" className="w-full p-3 rounded bg-gray-300" />
-        <button disabled={loading} className="w-full bg-indigo-600 p-3 rounded">{loading ? "Signing..." : "Signup"}</button>
+        <input value={name} onChange={e => setName(e.target.value)} placeholder="Name" className="w-full p-3 rounded bg-gray-200 dark:bg-gray-700 text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-colors duration-300" />
+        <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" className="w-full p-3 rounded bg-gray-200 dark:bg-gray-700 text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-colors duration-300" />
+        <input value={password} onChange={e => setPassword(e.target.value)} type="password" placeholder="Password" className="w-full p-3 rounded bg-gray-200 dark:bg-gray-700 text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-colors duration-300" />
+        <button disabled={loading} className="w-full bg-indigo-600 p-3 rounded text-white transition-colors duration-300">{loading ? "Signing..." : "Signup"}</button>
       </form>
     </div>
   );

@@ -30,10 +30,10 @@ export default function App() {
   }, []);
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-800 transition-colors">
+      <div className="min-h-screen bg-white text-black dark:bg-slate-950 dark:text-white transition-colors duration-300">
         <Navbar />
         <Toaster />
-        <main className="container mx-auto p-4">
+        <main className="container mx-auto p-4 transition-colors duration-300">
           <Suspense fallback={<div className="flex items-center justify-center py-12"><Spinner size={6} /></div>}>
             <Routes>
               <Route path="/" element={<Home />} />

@@ -47,9 +47,9 @@ export default function Result() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded-lg shadow-lg">
+    <div className="max-w-4xl mx-auto mt-8 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded-lg shadow-lg transition-colors duration-300">
       <div className="mb-6 flex justify-between items-center">
-        <h2 className="text-3xl font-bold text-gray-800">Interview Results</h2>
+        <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Interview Results</h2>
         <button
           onClick={downloadReport}
           className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition font-medium"
@@ -71,11 +71,11 @@ export default function Result() {
       )}
 
       {/* Printable Report Content */}
-      <div ref={reportRef} className="bg-white p-8 rounded-lg shadow-md">
+      <div ref={reportRef} className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md transition-colors duration-300">
         {/* Header */}
-        <div className="text-center mb-8 pb-6 border-b-2 border-gray-200">
-          <h1 className="text-3xl font-bold text-gray-800">AI Interview Report</h1>
-          <p className="text-gray-600 mt-2">Interview Assessment & Analysis</p>
+        <div className="text-center mb-8 pb-6 border-b-2 border-gray-200 dark:border-gray-700">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">AI Interview Report</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">Interview Assessment & Analysis</p>
           <p className="text-sm text-gray-500 mt-3">{result.generatedAt ? new Date(result.generatedAt).toLocaleString() : 'Date not available'}</p>
         </div>
 

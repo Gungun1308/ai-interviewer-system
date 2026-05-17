@@ -274,7 +274,7 @@ export default function Interview() {
   const question = questions[currentIndex];
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded shadow-lg" onCopy={preventCopy}>
+    <div className="max-w-3xl mx-auto mt-8 bg-white dark:bg-gray-900 text-black dark:text-white p-6 rounded shadow-lg transition-colors duration-300" onCopy={preventCopy}>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
@@ -288,7 +288,7 @@ export default function Interview() {
           </div>
         </div>
 
-        <div className="rounded bg-blue-50 border border-blue-200 p-3 text-sm text-blue-800">
+        <div className="rounded bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 p-3 text-sm text-blue-800 dark:text-blue-200 transition-colors duration-300">
           <p className="font-semibold mb-1">💡 Quick Tips:</p>
           <ul className="list-disc ml-5 text-xs">
             <li>After recording, question auto-advances in 1.5 seconds</li>
@@ -304,9 +304,9 @@ export default function Interview() {
         )}
 
         <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
-          <div className="bg-white p-5 rounded shadow-sm">
-            <p className="font-medium text-lg mb-3">{question?.questionText || "No question found"}</p>
-            <div className="rounded border border-gray-200 bg-gray-50 p-4 text-gray-700">
+          <div className="bg-white dark:bg-gray-800 p-5 rounded shadow-sm transition-colors duration-300">
+            <p className="font-medium text-lg mb-3 text-gray-900 dark:text-gray-100">{question?.questionText || "No question found"}</p>
+            <div className="rounded border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4 text-gray-700 dark:text-gray-200">
               <p className="mb-1 text-sm text-gray-500">Skill: {question?.skill || "General"}</p>
               <p className="mb-1 text-sm text-gray-500">Difficulty: {question?.difficulty || "Medium"}</p>
             </div>
@@ -323,9 +323,9 @@ export default function Interview() {
             </div>
           </div>
 
-          <div className="bg-white p-5 rounded shadow-sm">
-            <p className="font-semibold mb-3">Camera status</p>
-            <div className="space-y-3 text-sm text-gray-700">
+          <div className="bg-white dark:bg-gray-800 p-5 rounded shadow-sm transition-colors duration-300">
+            <p className="font-semibold mb-3 text-gray-900 dark:text-gray-100">Camera status</p>
+            <div className="space-y-3 text-sm text-gray-700 dark:text-gray-200">
               <div className="flex items-center gap-3">
                 <span className={`h-3 w-3 rounded-full ${cameraOn ? 'bg-green-600' : 'bg-red-600'}`}></span>
                 <span>{cameraOn ? 'Camera is active' : 'Camera is inactive'}</span>

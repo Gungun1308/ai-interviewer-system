@@ -1,31 +1,32 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useLayoutEffect, useState } from 'react';
 
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => {
-    try {
-      const stored = localStorage.getItem('theme');
-      if (stored) return stored;
-      // fallback to system preference
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      return prefersDark ? 'dark' : 'light';
-    } catch (e) {
-      return 'light';
-    }
-  });
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
+    try {
+      const stored = localStorage.getItem('theme');
+      if (stored === 'dark' || stored === 'light') {
+        setTheme(stored);
+      }
+    } catch (e) {
+      // keep default light theme on error
     }
-    try { localStorage.setItem('theme', theme); } catch (e) {}
+  }, []);
+
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle('dark', theme === 'dark');
+    try {
+      localStorage.setItem('theme', theme);
+    } catch (e) {
+      // ignore write failures
+    }
   }, [theme]);
 
-  const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
+  const toggleTheme = () => setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
