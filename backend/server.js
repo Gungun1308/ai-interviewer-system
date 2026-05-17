@@ -5,6 +5,7 @@ require('dotenv').config(); // Load environment variables
 
 const routes = require('./routes');
 const { errorHandler } = require('./utils');
+const path = require('path');
 
 // Use the credentials given in the prompt
 const PORT = process.env.PORT || 5000;
@@ -26,10 +27,16 @@ const connectDB = async () => {
 connectDB();
 
 // --- Middleware ---
-// Enable CORS with configurable origin
-const allowedOrigin = process.env.CLIENT_ORIGIN || '*';
+// Enable CORS with configurable origin(s)
+const allowedOriginEnv = process.env.CLIENT_ORIGIN || '*';
+const allowedOrigins = String(allowedOriginEnv).split(',').map(s => s.trim());
 app.use(cors({
-  origin: allowedOrigin,
+  origin: function(origin, callback) {
+    // allow requests with no origin (like mobile apps, curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Origin not allowed by CORS'));
+  },
   methods: ['GET','POST','PUT','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
   credentials: true
@@ -42,16 +49,28 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 // --- Routes ---
 // Mount all API routes
 app.use('/api', routes);
+// Also expose same routes at root so both /auth/* and /api/auth/* work
+app.use('/', routes);
 
-// --- Serve Frontend Build Folder (Optional but requested) ---
-// Assuming a React build folder exists in the root directory named 'client/build'
-// if (process.env.NODE_ENV === 'production') {
-//     app.use(express.static('client/build'));
+// API 404 handler for unmatched /api routes
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ msg: 'API route not found' });
+});
 
-//     app.get('*', (req, res) => {
-//         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-//     });
-// }
+// --- Serve Frontend Build Folder (Optional) ---
+// If you deploy backend + frontend together, serve the built frontend here.
+if (process.env.NODE_ENV === 'production') {
+  const clientBuildPath = path.join(__dirname, '..', 'frontend', 'dist');
+  try {
+    app.use(express.static(clientBuildPath));
+
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(clientBuildPath, 'index.html'));
+    });
+  } catch (e) {
+    console.warn('Frontend build not found to serve from backend:', e.message);
+  }
+}
 
 
 // --- Global Error Handler ---

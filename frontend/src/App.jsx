@@ -13,6 +13,7 @@ const ResumeUpload = lazy(() => import("./pages/ResumeUpload"));
 const Interview = lazy(() => import("./pages/Interview"));
 const Result = lazy(() => import("./pages/Result"));
 const AdminPanel = lazy(() => import("./pages/AdminPanel"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 export default function App() {
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function App() {
 
               <Route path="/admin" element={<ProtectedRoute adminOnly={true}><AdminPanel/></ProtectedRoute>} />
 
-              <Route path="*" element={<Navigate to="/" />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </main>
